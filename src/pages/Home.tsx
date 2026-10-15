@@ -24,11 +24,12 @@ const serviceIcons = [
 
 export default function Home() {
   const track = useRef<HTMLDivElement>(null);
+  const settleTimer = useRef<number | undefined>(undefined);
   const [position, setPosition] = useState(0); // index de la première carte visible
   const [visible, setVisible] = useState(3); // nombre de cartes visibles à l'écran
   const [paused, setPaused] = useState(false);
   const maxPosition = services.length - 1;
-  const featured = Math.min(services.length - 1, position + Math.floor(visible / 2));
+  const featured = (position + Math.floor(visible / 2)) % services.length;
   // Des clones aux deux extrémités permettent une boucle fluide dans les deux sens.
   const cloneCount = Math.min(3, services.length);
   const carouselServices = [...services.slice(-cloneCount), ...services, ...services.slice(0, cloneCount)];
@@ -45,19 +46,30 @@ export default function Home() {
   const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Recalcule la position affichée (points, carte mise en avant) d'après le défilement réel.
+  const getLogicalPosition = (physicalIndex: number) =>
+    ((physicalIndex - cloneCount) % services.length + services.length) % services.length;
+
+  const finishScrolling = () => {
+    const m = measure();
+    if (!m) return;
+    const physicalIndex = Math.round(m.el.scrollLeft / m.step);
+    if (physicalIndex < cloneCount) {
+      m.el.scrollTo({ left: m.el.scrollLeft + services.length * m.step, behavior: 'auto' });
+    } else if (physicalIndex >= cloneCount + services.length) {
+      m.el.scrollTo({ left: m.el.scrollLeft - services.length * m.step, behavior: 'auto' });
+    }
+    const settledIndex = Math.round(m.el.scrollLeft / m.step);
+    setPosition(getLogicalPosition(settledIndex));
+  };
+
   const sync = () => {
     const m = measure();
     if (!m) return;
     setVisible(m.count);
-    let physicalIndex = Math.round(m.el.scrollLeft / m.step);
-    if (physicalIndex < cloneCount) {
-      m.el.scrollTo({ left: m.el.scrollLeft + services.length * m.step, behavior: 'auto' });
-      physicalIndex += services.length;
-    } else if (physicalIndex >= cloneCount + services.length) {
-      m.el.scrollTo({ left: m.el.scrollLeft - services.length * m.step, behavior: 'auto' });
-      physicalIndex -= services.length;
-    }
-    setPosition(((physicalIndex - cloneCount) % services.length + services.length) % services.length);
+    const physicalIndex = Math.round(m.el.scrollLeft / m.step);
+    setPosition(getLogicalPosition(physicalIndex));
+    window.clearTimeout(settleTimer.current);
+    settleTimer.current = window.setTimeout(finishScrolling, 140);
   };
   const goTo = (index: number) => {
     const m = measure();
@@ -65,15 +77,27 @@ export default function Home() {
     const target = cloneCount + index;
     m.el.scrollTo({ left: target * m.step, behavior: reducedMotion() ? 'auto' : 'smooth' });
   };
-  const next = () => goTo(position + 1);
-  const prev = () => goTo(position - 1);
+  const next = () => {
+    const m = measure();
+    if (m) goTo(getLogicalPosition(Math.round(m.el.scrollLeft / m.step)) + 1);
+  };
+  const prev = () => {
+    const m = measure();
+    if (m) goTo(getLogicalPosition(Math.round(m.el.scrollLeft / m.step)) - 1);
+  };
 
   useEffect(() => {
     const m = measure();
     m?.el.scrollTo({ left: cloneCount * m.step, behavior: 'auto' });
     sync();
+    const el = track.current;
+    el?.addEventListener('scrollend', finishScrolling);
     window.addEventListener('resize', sync);
-    return () => window.removeEventListener('resize', sync);
+    return () => {
+      window.clearTimeout(settleTimer.current);
+      el?.removeEventListener('scrollend', finishScrolling);
+      window.removeEventListener('resize', sync);
+    };
   }, []);
 
   // Défilement automatique : une carte toutes les 4 s, retour au début à la fin.
