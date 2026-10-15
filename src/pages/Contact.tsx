@@ -30,8 +30,8 @@ export default function Contact() {
     try {
       const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(site.email)}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', Accept: 'application/json' },
+        body: new URLSearchParams(body).toString(),
       });
       const result: { success?: boolean | string; message?: string; errors?: string[] } = await response.json();
       if (!response.ok || (result.success !== true && result.success !== 'true')) {
@@ -40,7 +40,7 @@ export default function Contact() {
       form.reset();
       setSubmitStatus('success');
     } catch (error) {
-      setSubmitError(error instanceof Error ? error.message : 'Erreur de connexion au service email.');
+      setSubmitError(error instanceof TypeError ? 'Connexion au service email impossible ou requête bloquée par le navigateur (CORS). Vérifiez votre connexion et réessayez.' : error instanceof Error ? error.message : 'Erreur de connexion au service email.');
       setSubmitStatus('error');
     }
   }
