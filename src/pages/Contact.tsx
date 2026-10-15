@@ -15,10 +15,12 @@ function ContactIcon({ kind }: { kind: 'whatsapp' | 'phone' | 'email' | 'locatio
 export default function Contact() {
   const phone = site.whatsappLabel.replace(/[^\d+]/g, '');
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [submitError, setSubmitError] = useState('');
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitStatus('sending');
+    setSubmitError('');
     const form = event.currentTarget;
     const body: Record<string, string> = { _subject: 'Nouvelle demande de contact — Nodalys' };
     new FormData(form).forEach((value, key) => {
@@ -31,12 +33,14 @@ export default function Contact() {
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(body),
       });
-      if (!response.ok) throw new Error('Form submission failed');
-      const result: { success?: boolean | string } = await response.json();
-      if (result.success !== true && result.success !== 'true') throw new Error('Email delivery was not accepted');
+      const result: { success?: boolean | string; message?: string; errors?: string[] } = await response.json();
+      if (!response.ok || (result.success !== true && result.success !== 'true')) {
+        throw new Error(result.message || result.errors?.join(', ') || `Le service email a répondu avec le code ${response.status}.`);
+      }
       form.reset();
       setSubmitStatus('success');
-    } catch {
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Erreur de connexion au service email.');
       setSubmitStatus('error');
     }
   }
@@ -76,7 +80,7 @@ export default function Contact() {
             <button className="btn btn-primary contact-submit" type="submit" disabled={submitStatus === 'sending'}>{submitStatus === 'sending' ? 'Envoi en cours…' : 'Envoyer le message'}</button>
           </form>
           {submitStatus !== 'idle' && <div className="contact-submit-status" role="status" aria-live="polite">
-            <p>{submitStatus === 'sending' ? 'Envoi de votre demande…' : submitStatus === 'success' ? `Votre demande a été envoyée. Nous vous répondrons à ${site.email}.` : 'L’envoi a échoué. Réessayez ou contactez-nous directement par email.'}</p>
+            <p>{submitStatus === 'sending' ? 'Envoi de votre demande…' : submitStatus === 'success' ? `Votre demande a été envoyée. Nous vous répondrons à ${site.email}.` : `L’envoi a échoué : ${submitError} Vous pouvez réessayer ou contacter ${site.email} directement.`}</p>
           </div>}
         </div>
 

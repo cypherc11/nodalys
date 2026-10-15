@@ -137,7 +137,7 @@ ul.checks,.plan ul{padding-left:1.1rem}
 
 /* Accueil : l’image sert de fond au bandeau, avec un voile pour garder le texte lisible. */
 .hero .btn-primary{color:var(--green-900)}
-.hero-photo{min-height:var(--hero-h);display:flex;align-items:center;background:linear-gradient(90deg,rgba(11,61,46,.95) 0%,rgba(11,61,46,.82) 45%,rgba(11,61,46,.3) 100%),var(--hero-img,url(/assets/images/poste-de-travail.jpg)) var(--hero-pos,70% center)/cover var(--green-700)}
+.hero-photo{min-height:var(--hero-h);display:flex;align-items:center;background:linear-gradient(90deg,rgba(11,61,46,.95) 0%,rgba(11,61,46,.82) 45%,rgba(11,61,46,.3) 100%),var(--hero-img,url(/assets/images/poste-de-travail.webp)) var(--hero-pos,70% center)/cover var(--green-700)}
 .hero-home{min-height:var(--hero-h-tall)}
 /* Une photo par page : --hero-img (image) et --hero-pos (cadrage). */
 .hero-bg-handshake{--hero-img:url(/assets/images/hero-poignee-de-main.webp);--hero-pos:65% 35%}
@@ -194,7 +194,7 @@ ul.checks,.plan ul{padding-left:1.1rem}
 }
 @media(max-width:800px){
  .split{grid-template-columns:1fr}
- .hero-photo{background-image:linear-gradient(rgba(11,61,46,.88),rgba(11,61,46,.88)),var(--hero-img,url(/assets/images/poste-de-travail.jpg))}
+ .hero-photo{background-image:linear-gradient(rgba(11,61,46,.88),rgba(11,61,46,.88)),var(--hero-img,url(/assets/images/poste-de-travail.webp))}
  .service-slide{flex-basis:calc((100% - 1rem)/2)}
 }
 @media(max-width:540px){.service-slide{flex-basis:86%;min-height:290px}}

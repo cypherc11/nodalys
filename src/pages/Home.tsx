@@ -110,7 +110,7 @@ export default function Home() {
       const physicalIndex = Math.round(m.el.scrollLeft / m.step);
       const current = ((physicalIndex - cloneCount) % services.length + services.length) % services.length;
       goTo(current + 1);
-    }, 4000);
+    }, 3000);
     return () => window.clearInterval(id);
   }, [paused]);
 
