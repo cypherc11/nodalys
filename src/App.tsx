@@ -5,6 +5,7 @@ import Offers from './pages/Offers';
 import OfferDetail from './pages/OfferDetail';
 import Diagnostic from './pages/Diagnostic';
 import AuditFlash from './pages/AuditFlash';
+import ServiceDetail from './pages/ServiceDetail';
 import About from './pages/About';
 import Faq from './pages/Faq';
 import Contact from './pages/Contact';
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="offres/:slug" element={<OfferDetail />} />
         <Route path="diagnostic" element={<Diagnostic />} />
         <Route path="audit-flash" element={<AuditFlash />} />
+        <Route path="services/:slug" element={<ServiceDetail />} />
         <Route path="a-propos" element={<About />} />
         <Route path="faq" element={<Faq />} />
         <Route path="contact" element={<Contact />} />

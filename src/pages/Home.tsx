@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Btn, Hero, Section } from '../components/Ui';
-import { services, site } from '../data/site';
+import { services, servicePaths, site } from '../data/site';
 
 const proofs = [
   { title: 'Diagnostic gratuit', text: '20 à 30 minutes, sans engagement' },
@@ -121,7 +121,7 @@ export default function Home() {
                 <span className="service-icon" aria-hidden="true">{serviceIcons[originalIndex]}</span>
                 <h3>{service.title}</h3>
                 <p>{service.text}</p>
-                <Link to="/offres" className="service-more" tabIndex={isClone ? -1 : undefined}>En savoir plus <span aria-hidden="true">&#8599;</span></Link>
+                <Link to={servicePaths[originalIndex]} className="service-more" tabIndex={isClone ? -1 : undefined}>En savoir plus <span aria-hidden="true">&#8599;</span></Link>
               </article>;
             })}
           </div>

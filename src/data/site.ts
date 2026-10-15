@@ -26,6 +26,14 @@ export const services = [
   { title: 'Dépannage ponctuel', text: 'Diagnostic et réparation, avec compte rendu.' },
 ];
 // Prix : propositions du dossier de contenu, à confirmer.
+export const servicePaths = [
+  '/services/maintenance-informatique',
+  '/audit-flash',
+  '/services/reseau-wifi',
+  '/services/videosurveillance',
+  '/services/depannage-ponctuel',
+] as const;
+
 export const offers = [
   { slug: 'essentiel', name: 'Essentiel', price: 'À partir de 30 000 FCFA / mois', tagline: 'Pour 1 à 5 postes.', popular: false,
     features: ['Assistance à distance', 'Mises à jour', '1 visite préventive par mois', 'Sur site sous 72 h (à distance : 1 jour ouvré)'] },

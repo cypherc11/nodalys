@@ -3,12 +3,15 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import { offers, pageMeta } from '../data/site';
+import { serviceDetails } from '../data/serviceDetails';
 
 function metaFor(pathname: string) {
   const path = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   if (pageMeta[path]) return pageMeta[path];
   const offer = path.startsWith('/offres/') ? offers.find(o => o.slug === path.slice('/offres/'.length)) : undefined;
   if (offer) return { title: `Offre ${offer.name} — Nodalys`, description: `${offer.name} : ${offer.tagline} ${offer.price}.` };
+  const service = path.startsWith('/services/') ? serviceDetails.find(item => item.slug === path.slice('/services/'.length)) : undefined;
+  if (service) return { title: `${service.title} — Nodalys`, description: service.lead };
   return { title: 'Page introuvable — Nodalys', description: pageMeta['/'].description };
 }
 
