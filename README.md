@@ -18,8 +18,8 @@ Le contact se fait par WhatsApp et email (pas de formulaire pour l’instant).
 ## Notes de la dernière révision
 - Page `/audit-flash` ajoutée ; le diagnostic gratuit (échange de 20 à 30 min) est distingué de l'Audit Flash Sécurité (demi-journée sur site, prix fixe, rapport détaillé).
 - Exemple de rapport présenté comme **fictif** partout (et non « anonymisé »).
-- Titres et descriptions par page : `pageMeta` dans `src/data/site.ts` (appliqués dans `src/components/Layout.tsx`).
-- Aperçu des liens (Open Graph) dans `index.html` + `public/assets/og-image.jpg`. Adresse du site : `https://nodalys-it.netlify.app` (à remplacer dans `index.html`, `public/robots.txt` et `public/sitemap.xml` si tu passes à un domaine personnalisé).
+- Titres, descriptions et URL canoniques par page : `pageMeta` dans `src/data/site.ts` (appliqués dans `src/components/Layout.tsx`).
+- Aperçu des liens (Open Graph) dans `index.html` + `public/assets/og-image.jpg`. Adresse du site : `https://nodalys-it.vercel.app`.
 - Images de fond converties en WebP (≈ 100 Ko au lieu de ≈ 2 Mo). Les PNG d'origine sont dans `design-sources/`, hors du build.
 - Carrousel des services (accueil) : flèches précédent/suivant, points = positions réelles, défilement auto avec retour au début, sans duplication des cartes. Logique dans `src/pages/Home.tsx`, styles `.services-carousel` / `.carousel-arrows`.
 - Photos de héros par page : classes `hero-bg-*` dans `src/styles.css` (image via `--hero-img`, cadrage via `--hero-pos`). Images WebP dans `public/assets/images/` (`hero-*.webp`) ; `design-sources/` garde les PNG d'origine, dont la photo de vidéosurveillance, pas encore utilisée.
