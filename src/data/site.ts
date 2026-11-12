@@ -9,7 +9,7 @@ export const site = {
   whatsapp: `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`,
   whatsappLabel: '+237 6 97 99 55 79',
   // Renseigner ici les URL des pages officielles pour afficher leurs icônes dans le footer.
-  linkedinUrl: '',
+  linkedinUrl: 'https://www.linkedin.com/in/ahmed-fadil-42b09933a/',
   facebookUrl: '',
   email: 'ahmedfadil1@proton.me', // provisoire : adresse sur le domaine plus tard
 };
